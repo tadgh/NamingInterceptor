@@ -84,6 +84,9 @@ public class S3BlobNamingInterceptor {
 		return "missing-export-identifier/" + theJobId + "/";
 	}
 
+	/**
+	 * Given a URL for an extension, return an optional containing the string value of that extension, if present. Otherwise, return an empty optional.
+	 */
 	private Optional<String> getExtensionByUrl(IBaseHasExtensions theExtendable, String theExtensionUrl) {
 		return theExtendable.getExtension().stream().filter(ext -> ext.getUrl().equalsIgnoreCase(theExtensionUrl)).map(ext -> ext.getValue().toString()).findFirst();
 	}
