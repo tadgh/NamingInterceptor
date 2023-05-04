@@ -1,43 +1,33 @@
 package com.smilecdr.demo.fhirstorage;
 
-import ca.uhn.fhir.context.RuntimeResourceDefinition;
 import ca.uhn.fhir.interceptor.api.Hook;
 import ca.uhn.fhir.interceptor.api.Pointcut;
-import ca.uhn.fhir.interceptor.model.ReadPartitionIdRequestDetails;
-import ca.uhn.fhir.interceptor.model.RequestPartitionId;
-import ca.uhn.fhir.interceptor.model.TransactionWriteOperationsDetails;
-import ca.uhn.fhir.jpa.api.model.DeleteConflictList;
-import ca.uhn.fhir.jpa.api.model.ResourceVersionConflictResolutionStrategy;
+import ca.uhn.fhir.jpa.api.config.DaoConfig;
 import ca.uhn.fhir.jpa.model.util.JpaConstants;
-import ca.uhn.fhir.jpa.searchparam.SearchParameterMap;
-import ca.uhn.fhir.rest.api.InterceptorInvocationTimingEnum;
-import ca.uhn.fhir.rest.api.server.IPreResourceAccessDetails;
-import ca.uhn.fhir.rest.api.server.IPreResourceShowDetails;
 import ca.uhn.fhir.rest.api.server.RequestDetails;
-import ca.uhn.fhir.rest.api.server.bulk.BulkDataExportOptions;
-import ca.uhn.fhir.rest.api.server.storage.DeferredInterceptorBroadcasts;
-import ca.uhn.fhir.rest.api.server.storage.TransactionDetails;
-import ca.uhn.fhir.rest.server.servlet.ServletRequestDetails;
 import ca.uhn.fhir.util.StopWatch;
-import ca.uhn.fhir.validation.ValidationResult;
-import org.hl7.fhir.instance.model.api.IBaseBundle;
 import org.hl7.fhir.instance.model.api.IBaseHasExtensions;
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.hl7.fhir.instance.model.api.IIdType;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.Collectors;
 
 public class S3BlobNamingInterceptor {
 
+	@Autowired
+	private DaoConfig myDaoConfig;
+
 	private static final Logger ourLog = LoggerFactory.getLogger(S3BlobNamingInterceptor.class);
 
+	/**
+	 * This removes the limits on the amount of meta tags that can be added to a given resource.
+	 */
+	@Hook(Pointcut.INTERCEPTOR_REGISTERED)
+	public void modifyDaoConfig() {
+		myDaoConfig.setResourceMetaCountHardLimit(null);
+	}
 	@Hook(Pointcut.STORAGE_BINARY_ASSIGN_BLOB_ID_PREFIX)
 	public String storageAssignBlobIdPrefix(RequestDetails theRequestDetails, IBaseResource theBinaryResource) {
 		ourLog.info("Interceptor STORAGE_BINARY_ASSIGN_BLOB_ID_PREFIX - started");
