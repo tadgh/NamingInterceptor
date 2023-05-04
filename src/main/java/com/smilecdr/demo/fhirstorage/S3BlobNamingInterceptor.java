@@ -31,22 +31,13 @@ public class S3BlobNamingInterceptor {
 	@Hook(Pointcut.STORAGE_BINARY_ASSIGN_BLOB_ID_PREFIX)
 	public String storageAssignBlobIdPrefix(RequestDetails theRequestDetails, IBaseResource theBinaryResource) {
 		ourLog.info("Interceptor STORAGE_BINARY_ASSIGN_BLOB_ID_PREFIX - started");
-		StopWatch stopWatch = new StopWatch();
-		try {
-			ourLog.info("Received Binary for prefixing!") ;
 			IBaseHasExtensions meta = (IBaseHasExtensions) theBinaryResource.getMeta();
-			ourLog.info("Here are the available extensions on the resource metadata.");
-			meta.getExtension().forEach(ext -> ourLog.info("Extension: " + ext.getUrl() + " " + ext.getValue().toString()));
-
 			// Export ID
 			Optional<String> exportId = getExtensionByUrl(meta, JpaConstants.BULK_META_EXTENSION_EXPORT_IDENTIFIER);
-
 			// Resource Type
 			Optional<String> resourceType = getExtensionByUrl(meta, JpaConstants.BULK_META_EXTENSION_RESOURCE_TYPE);
-
 			// Job ID
 			Optional<String> jobId = getExtensionByUrl(meta, JpaConstants.BULK_META_EXTENSION_JOB_ID);
-
 			if (exportId.isPresent() && resourceType.isPresent()) {
 				return buildExportIdAndResourceTypePrefix(exportId.get(), resourceType.get());
 			} else if (jobId.isPresent()) {
@@ -55,9 +46,6 @@ public class S3BlobNamingInterceptor {
 				ourLog.error("Unable to determine prefix for binary resource: {}", theBinaryResource.getIdElement().toUnqualifiedVersionless().getValue());
 				return "";
 			}
-		} finally {
-			ourLog.info("Interceptor STORAGE_BINARY_ASSIGN_BLOB_ID_PREFIX  - ended, execution took {}", stopWatch);
-		}
 	}
 
 	/**
