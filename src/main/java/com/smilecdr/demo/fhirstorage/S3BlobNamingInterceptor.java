@@ -30,7 +30,6 @@ public class S3BlobNamingInterceptor {
 	}
 	@Hook(Pointcut.STORAGE_BINARY_ASSIGN_BLOB_ID_PREFIX)
 	public String storageAssignBlobIdPrefix(RequestDetails theRequestDetails, IBaseResource theBinaryResource) {
-		ourLog.info("Interceptor STORAGE_BINARY_ASSIGN_BLOB_ID_PREFIX - started");
 			IBaseHasExtensions meta = (IBaseHasExtensions) theBinaryResource.getMeta();
 			// Export ID
 			Optional<String> exportId = getExtensionByUrl(meta, JpaConstants.BULK_META_EXTENSION_EXPORT_IDENTIFIER);
