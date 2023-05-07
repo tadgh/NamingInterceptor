@@ -8,6 +8,6 @@ mvn clean install -DskipTests
 ```
 
 Find the resulting `.jar` file in the target folder. Copy it to Smile CDR's `customerlib/` directory. 
-Under the persistence storage setting `Interceptor Bean Types`, type `com.smilecdr.demo.fhirstorage.S3BlobNamingInterceptor`, and then restart the persistence module. 
+Under the persistence storage setting `Interceptor Bean Types`, type `com.smilecdr.demo.fhirstorage.S3BlobNamingAndMetaCountInterceptor`, and then restart the persistence module. 
 
 

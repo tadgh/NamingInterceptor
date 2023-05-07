@@ -5,7 +5,6 @@ import ca.uhn.fhir.interceptor.api.Pointcut;
 import ca.uhn.fhir.jpa.api.config.DaoConfig;
 import ca.uhn.fhir.jpa.model.util.JpaConstants;
 import ca.uhn.fhir.rest.api.server.RequestDetails;
-import ca.uhn.fhir.util.StopWatch;
 import org.hl7.fhir.instance.model.api.IBaseHasExtensions;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.slf4j.Logger;
@@ -14,12 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
 
-public class S3BlobNamingInterceptor {
+public class S3BlobNamingAndMetaCountInterceptor {
 
 	@Autowired
 	private DaoConfig myDaoConfig;
 
-	private static final Logger ourLog = LoggerFactory.getLogger(S3BlobNamingInterceptor.class);
+	private static final Logger ourLog = LoggerFactory.getLogger(S3BlobNamingAndMetaCountInterceptor.class);
 
 	/**
 	 * This removes the limits on the amount of meta tags that can be added to a given resource.
